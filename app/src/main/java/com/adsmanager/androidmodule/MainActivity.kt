@@ -7,12 +7,7 @@ import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.adsmanager.ads.AdsManager
 import com.adsmanager.ads.AdsManagerOpenAd
-import com.adsmanager.ads.NetworkAds
-import com.adsmanager.ads.NetworkOpenAd
-import com.adsmanager.core.CallbackAds
-import com.adsmanager.core.CallbackOpenAd
-import com.adsmanager.core.IRewards
-import com.adsmanager.core.RewardsItem
+import com.adsmanager.core.*
 import com.adsmanager.core.iadsmanager.IInitialize
 import com.adsmanager.core.iadsmanager.SizeBanner
 import com.adsmanager.core.iadsmanager.SizeNative
@@ -23,29 +18,43 @@ class MainActivity : AppCompatActivity() {
     private val adsManager: AdsManager by inject()
     private val adsManagerOpenAd: AdsManagerOpenAd by inject()
 
-    private val primaryNetworkOpenAd = NetworkOpenAd.ADMOB
+    private val primaryNetworkOpenAd = NetworkAds.ADMOB
 
     private val primaryAds = NetworkAds.ADMOB
-    private val secondaryAds = NetworkAds.FAN
+    private val secondaryAds = NetworkAds.ADMOB
     private val tertiaryAds = NetworkAds.APPLOVIN_MAX
+    private val quaternaryAds = NetworkAds.START_IO
 
-    private val adUnitOpenAdId = "ca-app-pub-3940256099942544/3419835294"
+    private val adUnitOpenAdId = "208690301"
+
+    private val primaryAppId = ""
+    private val secondaryAppId = ""
+    private val tertiaryAppId = "208690301"
+    private val quaternaryAppId = "208690301"
 
     private val primaryBannerId = "ca-app-pub-3940256099942544/6300978111XXX"
-    private val secondaryBannerId = "1363711600744576_1363713000744436"
-    private val tertiaryBannerId = "62c9e910bbd85680"
+    private val secondaryBannerId = "ca-app-pub-3940256099942544/6300978111"
+
+    //    private val secondaryBannerId = "1363711600744576_1363713000744436"
+    private val tertiaryBannerId = "XXX"
+    private val quaternaryBannerId = "62c9e910bbd85680"
 
     private val primaryInterstitialId = "ca-app-pub-3940256099942544/1033173712"
-    private val secondaryInterstitialId = "1363711600744576_1508878896227845"
+    private val secondaryInterstitialId = "ca-app-pub-3940256099942544/1033173712"
+
+    //    private val secondaryInterstitialId = "1363711600744576_1508878896227845"
     private val tertiaryInterstitialId = "7263a762d1a5366b"
+    private val quaternaryInterstitialId = "7263a762d1a5366b"
 
     private val primaryNativeId = "ca-app-pub-4764558539538067/9810032480XXX"
     private val secondaryNativeId = "1363711600744576_1508905202891881"
     private val tertiaryNativeId = "91294e31700550f5"
+    private val quaternaryNativeId = "91294e31700550f5"
 
     private val primaryRewardsId = "ca-app-pub-3940256099942544/5224354917"
     private val secondaryRewardsId = "1363711600744576_1508879032894498"
     private val tertiaryRewardsId = "c11378688d2adfd1"
+    private val quaternaryRewardsId = "c11378688d2adfd1"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,30 +64,48 @@ class MainActivity : AppCompatActivity() {
             this,
             iInitialize = object : IInitialize {
                 override fun onInitializationComplete() {
-                    adsManager.loadGdpr(this@MainActivity, true, primaryAds)
-                    adsManager.loadInterstitial(
-                        this@MainActivity,
-                        primaryAds,
-                        primaryInterstitialId,
-                        secondaryAds,
-                        secondaryInterstitialId,
-                        tertiaryAds,
-                        tertiaryInterstitialId,
-                    )
-                    adsManager.loadRewards(
-                        this@MainActivity,
-                        primaryAds,
-                        primaryBannerId,
-                        secondaryAds,
-                        secondaryBannerId,
-                        tertiaryAds,
-                        tertiaryBannerId,
-                    )
+
                 }
             },
             primaryAds = primaryAds,
             secondaryAds = secondaryAds,
             tertiaryAds = tertiaryAds,
+            quaternaryAds = quaternaryAds,
+            primaryAppId = primaryAppId,
+            secondaryAppId = secondaryAppId,
+            tertiaryAppId = tertiaryAppId,
+            quaternaryAppId = quaternaryAppId,
+        )
+
+        adsManager.loadGdpr(
+            this@MainActivity,
+            true,
+            primaryAds,
+            secondaryAds,
+            tertiaryAds,
+            quaternaryAds
+        )
+        adsManager.loadInterstitial(
+            this@MainActivity,
+            primaryAds,
+            primaryInterstitialId,
+            secondaryAds,
+            secondaryInterstitialId,
+            tertiaryAds,
+            tertiaryInterstitialId,
+            quaternaryAds,
+            quaternaryInterstitialId
+        )
+        adsManager.loadRewards(
+            this@MainActivity,
+            primaryAds,
+            primaryBannerId,
+            secondaryAds,
+            secondaryBannerId,
+            tertiaryAds,
+            tertiaryBannerId,
+            quaternaryAds,
+            quaternaryRewardsId
         )
 
         adsManager.setTestDevices(
@@ -86,18 +113,21 @@ class MainActivity : AppCompatActivity() {
             listOf("ff85a790-04c7-4fbe-9ad5-e2a040685b69"),
             primaryAds,
             secondaryAds,
-            tertiaryAds
+            tertiaryAds,
+            quaternaryAds
         )
 
         findViewById<Button>(R.id.btnShowOpenApp).setOnClickListener {
             adsManagerOpenAd.showAdIfAvailable(
                 this,
-                primaryNetworkOpenAd,
-                adUnitOpenAdId,
+                ConfigAds.primaryAds,
+                ConfigAds.primaryOpenAdId,
+                ConfigAds.secondaryAds,
+                ConfigAds.secondaryOpenAdId,
                 null,
+                "",
                 null,
-                null,
-                null,
+                "",
                 object : CallbackOpenAd() {
                     override fun onAdFailedToLoad(error: String?) {
                         Log.e("HALLO", "openAd onAdFailedToLoad: $error")
@@ -126,6 +156,8 @@ class MainActivity : AppCompatActivity() {
                 secondaryBannerId,
                 tertiaryAds,
                 tertiaryBannerId,
+                quaternaryAds,
+                quaternaryBannerId,
                 object : CallbackAds() {
                     override fun onAdFailedToLoad(error: String?) {
                         Log.e("HALLO", "banner error: $error")
@@ -140,7 +172,10 @@ class MainActivity : AppCompatActivity() {
                 secondaryAds,
                 secondaryInterstitialId,
                 tertiaryAds,
-                tertiaryInterstitialId, object : CallbackAds() {
+                tertiaryInterstitialId,
+                quaternaryAds,
+                quaternaryInterstitialId,
+                object : CallbackAds() {
                     override fun onAdFailedToLoad(error: String?) {
                         Log.e("HALLO", "interstitial error: $error")
                     }
@@ -148,13 +183,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.btnShowRewards).setOnClickListener {
-            adsManager.showRewards(this,
+            adsManager.showRewards(
+                this,
                 primaryAds,
                 primaryRewardsId,
                 secondaryAds,
                 secondaryRewardsId,
                 tertiaryAds,
-                tertiaryRewardsId, object : CallbackAds() {
+                tertiaryRewardsId,
+                quaternaryAds,
+                quaternaryRewardsId,
+                object : CallbackAds() {
                     override fun onAdFailedToLoad(error: String?) {
                         Log.e("HALLO", "rewards error: $error")
                     }
@@ -180,6 +219,8 @@ class MainActivity : AppCompatActivity() {
                 secondaryNativeId,
                 tertiaryAds,
                 tertiaryNativeId,
+                quaternaryAds,
+                quaternaryNativeId,
                 object : CallbackAds() {
                     override fun onAdFailedToLoad(error: String?) {
                         Log.e("HALLO", "Native error: $error")

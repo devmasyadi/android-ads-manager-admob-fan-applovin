@@ -7,16 +7,16 @@ import android.os.CountDownTimer
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.adsmanager.ads.AdsManagerOpenAd
-import com.adsmanager.ads.NetworkOpenAd
 import com.adsmanager.core.CallbackAds
 import com.adsmanager.core.CallbackOpenAd
+import com.adsmanager.core.NetworkAds
 import org.koin.android.ext.android.inject
 
 /**
  * Number of seconds to count down before showing the app open ad. This simulates the time needed
  * to load the app.
  */
-private const val COUNTER_TIME = 2L
+private const val COUNTER_TIME = 1L
 
 private const val LOG_TAG = "SplashActivity"
 
@@ -25,7 +25,7 @@ class SplashActivity : AppCompatActivity() {
 
     private val adsManagerOpenAd: AdsManagerOpenAd by inject()
     private var secondsRemaining: Long = 0L
-    private val adUnitOpenAdId = "ca-app-pub-3940256099942544/3419835294"
+    private val adUnitOpenAdId = "ca-app-pub-3940256099942544/3419835294XX"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,12 +34,14 @@ class SplashActivity : AppCompatActivity() {
         ConfigAds.primaryOpenAdId = adUnitOpenAdId
         adsManagerOpenAd.loadAd(
             this,
-            NetworkOpenAd.ADMOB,
-            adUnitOpenAdId,
-            null,
-            null,
-            null,
-            null,
+            NetworkAds.ADMOB,
+            "ca-app-pub-3940256099942544/3419835294XX",
+            NetworkAds.ADMOB,
+            "ca-app-pub-3940256099942544/3419835294",
+            NetworkAds.APPLOVIN_MAX,
+            "",
+            NetworkAds.ADMOB,
+            "ca-app-pub-3940256099942544/3419835294XX",
             object :
                 CallbackAds() {
                 override fun onAdFailedToLoad(error: String?) {
@@ -69,12 +71,14 @@ class SplashActivity : AppCompatActivity() {
                 secondsRemaining = 0
                 adsManagerOpenAd.showAdIfAvailable(
                     this@SplashActivity,
-                    NetworkOpenAd.ADMOB,
-                    adUnitOpenAdId,
-                    null,
-                    null,
-                    null,
-                    null,
+                    NetworkAds.ADMOB,
+                    "ca-app-pub-3940256099942544/3419835294XX",
+                    NetworkAds.ADMOB,
+                    "ca-app-pub-3940256099942544/3419835294",
+                    NetworkAds.APPLOVIN_MAX,
+                    "",
+                    NetworkAds.ADMOB,
+                    "ca-app-pub-3940256099942544/3419835294XX",
                     object : CallbackOpenAd() {
 
                         override fun onAdFailedToLoad(error: String?) {

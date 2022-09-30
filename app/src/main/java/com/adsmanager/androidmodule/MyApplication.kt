@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.adsmanager.androidmodule
 
 import android.app.Activity
@@ -31,7 +33,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
             )
         }
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
-        adsManagerOpenAd = app.koin.get<AdsManagerOpenAd>()
+        adsManagerOpenAd = app.koin.get()
 
     }
 
@@ -43,12 +45,14 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
         adsManagerOpenAd?.getCurrentActivity()?.let {
             adsManagerOpenAd?.showAdIfAvailable(
                 it,
-                ConfigAds.primaryNetworkOpenAd,
+                ConfigAds.primaryAds,
                 ConfigAds.primaryOpenAdId,
-                ConfigAds.secondaryNetworkOpenAd,
+                ConfigAds.secondaryAds,
+                ConfigAds.secondaryOpenAdId,
                 null,
+                "",
                 null,
-                null,
+                "",
                 null
             )
         }
@@ -62,7 +66,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
         // SDK or another activity class implemented by a third party mediation partner. Updating the
         // currentActivity only when an ad is not showing will ensure it is not an ad activity, but the
         // one that shows the ad.
-        if (adsManagerOpenAd?.isShowingAd(ConfigAds.primaryNetworkOpenAd) == false) {
+        if (adsManagerOpenAd?.isShowingAd() == false) {
             adsManagerOpenAd?.setCurrentActivity(activity)
         }
     }

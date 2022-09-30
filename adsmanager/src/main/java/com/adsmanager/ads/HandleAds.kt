@@ -8,6 +8,7 @@ import com.adsmanager.applovin.ApplovinDiscoveryAds
 import com.adsmanager.applovin.ApplovinMaxAds
 import com.adsmanager.core.CallbackAds
 import com.adsmanager.core.IRewards
+import com.adsmanager.core.NetworkAds
 import com.adsmanager.core.iadsmanager.IInitialize
 import com.adsmanager.core.iadsmanager.SizeBanner
 import com.adsmanager.core.iadsmanager.SizeNative
@@ -29,7 +30,12 @@ class HandleAds(
             NetworkAds.ADMOB -> admobAds.initialize(context, appId, iInitialize)
             NetworkAds.FAN -> fanAds.initialize(context, iInitialize)
             NetworkAds.APPLOVIN_MAX -> applovinMaxAds.initialize(context, appId, iInitialize)
-            NetworkAds.APPLOVIN_DISCOVERY -> applovinDiscoveryAds.initialize(context, appId, iInitialize)
+            NetworkAds.APPLOVIN_DISCOVERY -> applovinDiscoveryAds.initialize(
+                context,
+                appId,
+                iInitialize
+            )
+            else -> {}
         }
     }
 
@@ -42,6 +48,7 @@ class HandleAds(
                 activity,
                 testDevices
             )
+            else -> {}
         }
     }
 
@@ -51,6 +58,7 @@ class HandleAds(
             NetworkAds.FAN -> fanAds.loadGdpr(activity, childDirected)
             NetworkAds.APPLOVIN_MAX -> applovinMaxAds.loadGdpr(activity, childDirected)
             NetworkAds.APPLOVIN_DISCOVERY -> applovinDiscoveryAds.loadGdpr(activity, childDirected)
+            else -> {}
         }
     }
 
@@ -91,6 +99,7 @@ class HandleAds(
                 adUnitId,
                 callbackAds
             )
+            else -> {}
         }
     }
 
@@ -107,6 +116,7 @@ class HandleAds(
                 activity,
                 adUnitId
             )
+            else -> {}
         }
     }
 
@@ -129,6 +139,7 @@ class HandleAds(
                 adUnitId,
                 callbackAds
             )
+            else -> {}
         }
     }
 
@@ -169,6 +180,7 @@ class HandleAds(
                 adUnitId,
                 callbackAds
             )
+            else -> {}
         }
     }
 
@@ -182,6 +194,7 @@ class HandleAds(
             NetworkAds.FAN -> fanAds.loadRewards(activity, adUnitId)
             NetworkAds.APPLOVIN_MAX -> applovinMaxAds.loadRewards(activity, adUnitId)
             NetworkAds.APPLOVIN_DISCOVERY -> applovinDiscoveryAds.loadRewards(activity, adUnitId)
+            else -> {}
         }
     }
 
@@ -207,6 +220,7 @@ class HandleAds(
                 callbackAds,
                 iRewards
             )
+            else -> {}
         }
     }
 }
