@@ -16,27 +16,47 @@ class AdsManager(
         context: Context,
         iInitialize: IInitialize,
         primaryAds: NetworkAds,
+        primaryAppId: String?,
         secondaryAds: NetworkAds?,
+        secondaryAppId: String?,
         tertiaryAds: NetworkAds?,
+        tertiaryAppId: String?,
+        quaternaryAds: NetworkAds?,
+        quaternaryAppId: String?
     ) {
-        handleAds.initialize(context, iInitialize, primaryAds)
-        secondaryAds?.let { handleAds.initialize(context, iInitialize, it) }
-        tertiaryAds?.let { handleAds.initialize(context, iInitialize, it) }
+        handleAds.initialize(context, primaryAppId, iInitialize, primaryAds)
+        secondaryAds?.let { handleAds.initialize(context, secondaryAppId, iInitialize, it) }
+        tertiaryAds?.let { handleAds.initialize(context, tertiaryAppId, iInitialize, it) }
+        quaternaryAds?.let { handleAds.initialize(context, quaternaryAppId, iInitialize, it) }
         iInitialize.onInitializationComplete()
     }
 
     override fun setTestDevices(
-        activity: Activity, testDevices: List<String>, primaryAds: NetworkAds,
+        activity: Activity,
+        testDevices: List<String>,
+        primaryAds: NetworkAds,
         secondaryAds: NetworkAds?,
-        tertiaryAds: NetworkAds?
+        tertiaryAds: NetworkAds?,
+        quaternaryAds: NetworkAds?
     ) {
         handleAds.setTestDevices(activity, testDevices, primaryAds)
         secondaryAds?.let { handleAds.setTestDevices(activity, testDevices, it) }
         tertiaryAds?.let { handleAds.setTestDevices(activity, testDevices, it) }
+        quaternaryAds?.let { handleAds.setTestDevices(activity, testDevices, it) }
     }
 
-    override fun loadGdpr(activity: Activity, childDirected: Boolean, primaryAds: NetworkAds) {
+    override fun loadGdpr(
+        activity: Activity,
+        childDirected: Boolean,
+        primaryAds: NetworkAds,
+        secondaryAds: NetworkAds?,
+        tertiaryAds: NetworkAds?,
+        quaternaryAds: NetworkAds?
+    ) {
         handleAds.loadGdpr(activity, childDirected, primaryAds)
+        secondaryAds?.let { handleAds.loadGdpr(activity, childDirected, it) }
+        tertiaryAds?.let { handleAds.loadGdpr(activity, childDirected, it) }
+        quaternaryAds?.let { handleAds.loadGdpr(activity, childDirected, it) }
     }
 
     override fun showBanner(
@@ -46,9 +66,11 @@ class AdsManager(
         primaryAds: NetworkAds,
         adUnitPrimaryId: String,
         secondaryAds: NetworkAds?,
-        adUnitSecondaryId: String?,
+        adUnitSecondaryId: String,
         tertiaryAds: NetworkAds?,
-        adUnitTertiaryAdsId: String?,
+        adUnitTertiaryAdsId: String,
+        quaternaryAds: NetworkAds?,
+        adUnitQuaternaryId: String,
         callbackAds: CallbackAds?
     ) {
         handleAds.showBanner(
@@ -59,33 +81,43 @@ class AdsManager(
             adUnitPrimaryId,
             object : CallbackAds() {
                 override fun onAdFailedToLoad(error: String?) {
-                    callbackAds?.onAdFailedToLoad(error)
+                    if (secondaryAds == null) callbackAds?.onAdFailedToLoad(error)
                     secondaryAds?.let {
-                        adUnitSecondaryId?.let {
-                            handleAds.showBanner(
-                                activity,
-                                bannerView,
-                                sizeBanner,
-                                secondaryAds,
-                                adUnitSecondaryId,
-                                object : CallbackAds() {
-                                    override fun onAdFailedToLoad(error: String?) {
-                                        callbackAds?.onAdFailedToLoad(error)
-                                        tertiaryAds?.let {
-                                            adUnitTertiaryAdsId?.let {
-                                                handleAds.showBanner(
-                                                    activity,
-                                                    bannerView,
-                                                    sizeBanner,
-                                                    tertiaryAds,
-                                                    adUnitTertiaryAdsId,
-                                                    callbackAds
-                                                )
+                        handleAds.showBanner(
+                            activity,
+                            bannerView,
+                            sizeBanner,
+                            secondaryAds,
+                            adUnitSecondaryId,
+                            object : CallbackAds() {
+                                override fun onAdFailedToLoad(error: String?) {
+                                    if (tertiaryAds == null) callbackAds?.onAdFailedToLoad(error)
+                                    tertiaryAds?.let {
+                                        handleAds.showBanner(
+                                            activity,
+                                            bannerView,
+                                            sizeBanner,
+                                            tertiaryAds,
+                                            adUnitTertiaryAdsId,
+                                            object : CallbackAds() {
+                                                override fun onAdFailedToLoad(error: String?) {
+                                                    if (quaternaryAds == null) callbackAds?.onAdFailedToLoad(error)
+                                                    quaternaryAds?.let {
+                                                        handleAds.showBanner(
+                                                            activity,
+                                                            bannerView,
+                                                            sizeBanner,
+                                                            quaternaryAds,
+                                                            adUnitQuaternaryId,
+                                                            callbackAds
+                                                        )
+                                                    }
+                                                }
                                             }
-                                        }
+                                        )
                                     }
-                                })
-                        }
+                                }
+                            })
                     }
                 }
             })
@@ -96,26 +128,30 @@ class AdsManager(
         primaryAds: NetworkAds,
         adUnitPrimaryId: String,
         secondaryAds: NetworkAds?,
-        adUnitSecondaryId: String?,
+        adUnitSecondaryId: String,
         tertiaryAds: NetworkAds?,
-        adUnitTertiaryAdsId: String?
+        adUnitTertiaryAdsId: String,
+        quaternaryAds: NetworkAds?,
+        adUnitQuaternaryId: String
     ) {
         handleAds.loadInterstitial(activity, primaryAds, adUnitPrimaryId)
         secondaryAds?.let {
-            adUnitSecondaryId?.let {
-                handleAds.loadInterstitial(
-                    activity, secondaryAds,
-                    adUnitSecondaryId
-                )
-            }
+            handleAds.loadInterstitial(
+                activity, secondaryAds,
+                adUnitSecondaryId
+            )
         }
         tertiaryAds?.let {
-            adUnitTertiaryAdsId?.let {
-                handleAds.loadInterstitial(
-                    activity, tertiaryAds,
-                    adUnitTertiaryAdsId
-                )
-            }
+            handleAds.loadInterstitial(
+                activity, tertiaryAds,
+                adUnitTertiaryAdsId
+            )
+        }
+        quaternaryAds?.let {
+            handleAds.loadInterstitial(
+                activity, quaternaryAds,
+                adUnitQuaternaryId
+            )
         }
     }
 
@@ -124,36 +160,56 @@ class AdsManager(
         primaryAds: NetworkAds,
         adUnitPrimaryId: String,
         secondaryAds: NetworkAds?,
-        adUnitSecondaryId: String?,
+        adUnitSecondaryId: String,
         tertiaryAds: NetworkAds?,
-        adUnitTertiaryAdsId: String?,
+        adUnitTertiaryAdsId: String,
+        quaternaryAds: NetworkAds?,
+        adUnitQuaternaryId: String,
         callbackAds: CallbackAds?
     ) {
         handleAds.showInterstitial(activity, primaryAds, adUnitPrimaryId, object : CallbackAds() {
+            override fun onAdLoaded() {
+                callbackAds?.onAdLoaded()
+            }
             override fun onAdFailedToLoad(error: String?) {
-                callbackAds?.onAdFailedToLoad(error)
+                if (secondaryAds == null) callbackAds?.onAdFailedToLoad(error)
                 secondaryAds?.let {
-                    adUnitSecondaryId?.let {
-                        handleAds.showInterstitial(
-                            activity,
-                            secondaryAds,
-                            adUnitSecondaryId,
-                            object : CallbackAds() {
-                                override fun onAdFailedToLoad(error: String?) {
-                                    callbackAds?.onAdFailedToLoad(error)
-                                    tertiaryAds?.let {
-                                        adUnitTertiaryAdsId?.let {
-                                            handleAds.showInterstitial(
-                                                activity,
-                                                tertiaryAds,
-                                                adUnitTertiaryAdsId,
-                                                callbackAds
-                                            )
+                    handleAds.showInterstitial(
+                        activity,
+                        secondaryAds,
+                        adUnitSecondaryId,
+                        object : CallbackAds() {
+                            override fun onAdLoaded() {
+                                callbackAds?.onAdLoaded()
+                            }
+                            override fun onAdFailedToLoad(error: String?) {
+                                if (tertiaryAds == null) callbackAds?.onAdFailedToLoad(error)
+                                tertiaryAds?.let {
+                                    handleAds.showInterstitial(
+                                        activity,
+                                        tertiaryAds,
+                                        adUnitTertiaryAdsId,
+                                        object : CallbackAds() {
+                                            override fun onAdLoaded() {
+                                                callbackAds?.onAdLoaded()
+                                            }
+                                            override fun onAdFailedToLoad(error: String?) {
+                                                if (quaternaryAds == null) callbackAds?.onAdFailedToLoad(error)
+                                                quaternaryAds?.let {
+                                                    handleAds.showInterstitial(
+                                                        activity,
+                                                        quaternaryAds,
+                                                        adUnitQuaternaryId,
+                                                        callbackAds
+                                                    )
+                                                }
+                                            }
                                         }
-                                    }
+                                    )
                                 }
-                            })
-                    }
+                            }
+                        }
+                    )
                 }
             }
         })
@@ -166,9 +222,11 @@ class AdsManager(
         primaryAds: NetworkAds,
         adUnitPrimaryId: String,
         secondaryAds: NetworkAds?,
-        adUnitSecondaryId: String?,
+        adUnitSecondaryId: String,
         tertiaryAds: NetworkAds?,
-        adUnitTertiaryAdsId: String?,
+        adUnitTertiaryAdsId: String,
+        quaternaryAds: NetworkAds?,
+        adUnitQuaternaryId: String,
         callbackAds: CallbackAds?
     ) {
         handleAds.showNativeAds(
@@ -178,34 +236,53 @@ class AdsManager(
             primaryAds,
             adUnitPrimaryId,
             object : CallbackAds() {
+                override fun onAdLoaded() {
+                    callbackAds?.onAdLoaded()
+                }
                 override fun onAdFailedToLoad(error: String?) {
-                    callbackAds?.onAdFailedToLoad(error)
+                    if (secondaryAds == null) callbackAds?.onAdFailedToLoad(error)
                     secondaryAds?.let {
-                        adUnitSecondaryId?.let {
-                            handleAds.showNativeAds(
-                                activity,
-                                nativeView,
-                                sizeNative,
-                                secondaryAds,
-                                adUnitSecondaryId,
-                                object : CallbackAds() {
-                                    override fun onAdFailedToLoad(error: String?) {
-                                        callbackAds?.onAdFailedToLoad(error)
-                                        tertiaryAds?.let {
-                                            adUnitTertiaryAdsId?.let {
-                                                handleAds.showNativeAds(
-                                                    activity,
-                                                    nativeView,
-                                                    sizeNative,
-                                                    tertiaryAds,
-                                                    adUnitTertiaryAdsId,
-                                                    callbackAds
-                                                )
+                        handleAds.showNativeAds(
+                            activity,
+                            nativeView,
+                            sizeNative,
+                            secondaryAds,
+                            adUnitSecondaryId,
+                            object : CallbackAds() {
+                                override fun onAdLoaded() {
+                                    callbackAds?.onAdLoaded()
+                                }
+                                override fun onAdFailedToLoad(error: String?) {
+                                    if (tertiaryAds == null) callbackAds?.onAdFailedToLoad(error)
+                                    tertiaryAds?.let {
+                                        handleAds.showNativeAds(
+                                            activity,
+                                            nativeView,
+                                            sizeNative,
+                                            tertiaryAds,
+                                            adUnitTertiaryAdsId,
+                                            object : CallbackAds() {
+                                                override fun onAdLoaded() {
+                                                    callbackAds?.onAdLoaded()
+                                                }
+                                                override fun onAdFailedToLoad(error: String?) {
+                                                    if (quaternaryAds == null) callbackAds?.onAdFailedToLoad(error)
+                                                    quaternaryAds?.let {
+                                                        handleAds.showNativeAds(
+                                                            activity,
+                                                            nativeView,
+                                                            sizeNative,
+                                                            quaternaryAds,
+                                                            adUnitQuaternaryId,
+                                                            callbackAds
+                                                        )
+                                                    }
+                                                }
                                             }
-                                        }
+                                        )
                                     }
-                                })
-                        }
+                                }
+                            })
                     }
                 }
             })
@@ -216,26 +293,30 @@ class AdsManager(
         primaryAds: NetworkAds,
         adUnitPrimaryId: String,
         secondaryAds: NetworkAds?,
-        adUnitSecondaryId: String?,
+        adUnitSecondaryId: String,
         tertiaryAds: NetworkAds?,
-        adUnitTertiaryAdsId: String?
+        adUnitTertiaryAdsId: String,
+        quaternaryAds: NetworkAds?,
+        adUnitQuaternaryId: String
     ) {
         handleAds.loadRewards(activity, primaryAds, adUnitPrimaryId)
         secondaryAds?.let {
-            adUnitSecondaryId?.let {
-                handleAds.loadRewards(
-                    activity, secondaryAds,
-                    adUnitSecondaryId
-                )
-            }
+            handleAds.loadRewards(
+                activity, secondaryAds,
+                adUnitSecondaryId
+            )
         }
         tertiaryAds?.let {
-            adUnitTertiaryAdsId?.let {
-                handleAds.loadRewards(
-                    activity, tertiaryAds,
-                    adUnitTertiaryAdsId
-                )
-            }
+            handleAds.loadRewards(
+                activity, tertiaryAds,
+                adUnitTertiaryAdsId
+            )
+        }
+        quaternaryAds?.let {
+            handleAds.loadRewards(
+                activity, quaternaryAds,
+                adUnitQuaternaryId
+            )
         }
     }
 
@@ -244,40 +325,60 @@ class AdsManager(
         primaryAds: NetworkAds,
         adUnitPrimaryId: String,
         secondaryAds: NetworkAds?,
-        adUnitSecondaryId: String?,
+        adUnitSecondaryId: String,
         tertiaryAds: NetworkAds?,
-        adUnitTertiaryAdsId: String?,
+        adUnitTertiaryAdsId: String,
+        quaternaryAds: NetworkAds?,
+        adUnitQuaternaryId: String,
         callbackAds: CallbackAds?,
         iRewards: IRewards?
     ) {
         handleAds.showRewards(activity, primaryAds, adUnitPrimaryId, object : CallbackAds() {
+            override fun onAdLoaded() {
+                callbackAds?.onAdLoaded()
+            }
             override fun onAdFailedToLoad(error: String?) {
-                callbackAds?.onAdFailedToLoad(error)
+                if (secondaryAds == null) callbackAds?.onAdFailedToLoad(error)
                 secondaryAds?.let {
-                    adUnitSecondaryId?.let {
-                        handleAds.showRewards(
-                            activity,
-                            secondaryAds,
-                            adUnitSecondaryId,
-                            object : CallbackAds() {
-                                override fun onAdFailedToLoad(error: String?) {
-                                    callbackAds?.onAdFailedToLoad(error)
-                                    tertiaryAds?.let {
-                                        adUnitTertiaryAdsId?.let {
-                                            handleAds.showRewards(
-                                                activity,
-                                                tertiaryAds,
-                                                adUnitTertiaryAdsId,
-                                                callbackAds,
-                                                iRewards
-                                            )
-                                        }
-                                    }
+                    handleAds.showRewards(
+                        activity,
+                        secondaryAds,
+                        adUnitSecondaryId,
+                        object : CallbackAds() {
+                            override fun onAdLoaded() {
+                                callbackAds?.onAdLoaded()
+                            }
+                            override fun onAdFailedToLoad(error: String?) {
+                                if (tertiaryAds == null) callbackAds?.onAdFailedToLoad(error)
+                                tertiaryAds?.let {
+                                    handleAds.showRewards(
+                                        activity,
+                                        tertiaryAds,
+                                        adUnitTertiaryAdsId,
+                                        object : CallbackAds() {
+                                            override fun onAdLoaded() {
+                                                callbackAds?.onAdLoaded()
+                                            }
+                                            override fun onAdFailedToLoad(error: String?) {
+                                                if (quaternaryAds == null) callbackAds?.onAdFailedToLoad(error)
+                                                quaternaryAds?.let {
+                                                    handleAds.showRewards(
+                                                        activity,
+                                                        quaternaryAds,
+                                                        adUnitQuaternaryId,
+                                                        callbackAds,
+                                                        iRewards
+                                                    )
+                                                }
+                                            }
+                                        },
+                                        iRewards
+                                    )
                                 }
-                            },
-                            iRewards
-                        )
-                    }
+                            }
+                        },
+                        iRewards
+                    )
                 }
             }
         }, iRewards)

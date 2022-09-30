@@ -15,19 +15,31 @@ interface IAds {
         context: Context,
         iInitialize: IInitialize,
         primaryAds: NetworkAds,
+        primaryAppId: String?,
         secondaryAds: NetworkAds?,
+        secondaryAppId: String?,
         tertiaryAds: NetworkAds?,
+        tertiaryAppId: String?,
+        quaternaryAds: NetworkAds?,
+        quaternaryAppId: String?,
     )
 
     fun setTestDevices(
-        activity: Activity, testDevices: List<String>, primaryAds: NetworkAds,
+        activity: Activity, testDevices: List<String>,
+        primaryAds: NetworkAds,
         secondaryAds: NetworkAds?,
-        tertiaryAds: NetworkAds?
-    ) {
+        tertiaryAds: NetworkAds?,
+        quaternaryAds: NetworkAds?,
+    )
 
-    }
-
-    fun loadGdpr(activity: Activity, childDirected: Boolean, primaryAds: NetworkAds)
+    fun loadGdpr(
+        activity: Activity,
+        childDirected: Boolean,
+        primaryAds: NetworkAds,
+        secondaryAds: NetworkAds?,
+        tertiaryAds: NetworkAds?,
+        quaternaryAds: NetworkAds?,
+    )
 
     fun showBanner(
         activity: Activity,
@@ -36,9 +48,11 @@ interface IAds {
         primaryAds: NetworkAds,
         adUnitPrimaryId: String,
         secondaryAds: NetworkAds?,
-        adUnitSecondaryId: String?,
+        adUnitSecondaryId: String,
         tertiaryAds: NetworkAds?,
-        adUnitTertiaryAdsId: String?,
+        adUnitTertiaryAdsId: String,
+        quaternaryAds: NetworkAds?,
+        adUnitQuaternaryId: String,
         callbackAds: CallbackAds?
     )
 
@@ -47,9 +61,11 @@ interface IAds {
         primaryAds: NetworkAds,
         adUnitPrimaryId: String,
         secondaryAds: NetworkAds?,
-        adUnitSecondaryId: String?,
+        adUnitSecondaryId: String,
         tertiaryAds: NetworkAds?,
-        adUnitTertiaryAdsId: String?,
+        adUnitTertiaryAdsId: String,
+        quaternaryAds: NetworkAds?,
+        adUnitQuaternaryId: String,
     )
 
     fun showInterstitial(
@@ -57,9 +73,11 @@ interface IAds {
         primaryAds: NetworkAds,
         adUnitPrimaryId: String,
         secondaryAds: NetworkAds?,
-        adUnitSecondaryId: String?,
+        adUnitSecondaryId: String,
         tertiaryAds: NetworkAds?,
-        adUnitTertiaryAdsId: String?,
+        adUnitTertiaryAdsId: String,
+        quaternaryAds: NetworkAds?,
+        adUnitQuaternaryId: String,
         callbackAds: CallbackAds?
     )
 
@@ -70,9 +88,11 @@ interface IAds {
         primaryAds: NetworkAds,
         adUnitPrimaryId: String,
         secondaryAds: NetworkAds?,
-        adUnitSecondaryId: String?,
+        adUnitSecondaryId: String,
         tertiaryAds: NetworkAds?,
-        adUnitTertiaryAdsId: String?,
+        adUnitTertiaryAdsId: String,
+        quaternaryAds: NetworkAds?,
+        adUnitQuaternaryId: String,
         callbackAds: CallbackAds?
     )
 
@@ -81,9 +101,11 @@ interface IAds {
         primaryAds: NetworkAds,
         adUnitPrimaryId: String,
         secondaryAds: NetworkAds?,
-        adUnitSecondaryId: String?,
+        adUnitSecondaryId: String,
         tertiaryAds: NetworkAds?,
-        adUnitTertiaryAdsId: String?,
+        adUnitTertiaryAdsId: String,
+        quaternaryAds: NetworkAds?,
+        adUnitQuaternaryId: String,
     )
 
     fun showRewards(
@@ -91,9 +113,11 @@ interface IAds {
         primaryAds: NetworkAds,
         adUnitPrimaryId: String,
         secondaryAds: NetworkAds?,
-        adUnitSecondaryId: String?,
+        adUnitSecondaryId: String,
         tertiaryAds: NetworkAds?,
-        adUnitTertiaryAdsId: String?,
+        adUnitTertiaryAdsId: String,
+        quaternaryAds: NetworkAds?,
+        adUnitQuaternaryId: String,
         callbackAds: CallbackAds?,
         iRewards: IRewards?
     )
