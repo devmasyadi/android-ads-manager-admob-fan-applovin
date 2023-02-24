@@ -26,20 +26,22 @@ class SplashActivity : AppCompatActivity() {
     private val adsManagerOpenAd: AdsManagerOpenAd by inject()
     private var secondsRemaining: Long = 0L
     private val adUnitOpenAdId = "ca-app-pub-3940256099942544/3419835294XX"
+    private var isShowingAd = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
         ConfigAds.primaryOpenAdId = adUnitOpenAdId
+
         adsManagerOpenAd.loadAd(
             this,
             NetworkAds.ADMOB,
             "ca-app-pub-3940256099942544/3419835294XX",
             NetworkAds.ADMOB,
-            "ca-app-pub-3940256099942544/3419835294",
+            "ca-app-pub-3940256099942544/3419835294XXX",
             NetworkAds.APPLOVIN_MAX,
-            "",
+            "fcd4981c18e62771",
             NetworkAds.ADMOB,
             "ca-app-pub-3940256099942544/3419835294XX",
             object :
@@ -50,7 +52,10 @@ class SplashActivity : AppCompatActivity() {
 
                 override fun onAdLoaded() {
                     super.onAdLoaded()
-                    createTimer(COUNTER_TIME)
+                    if(!isShowingAd) {
+                        isShowingAd = true
+                        createTimer(COUNTER_TIME)
+                    }
                 }
             })
     }
@@ -74,9 +79,9 @@ class SplashActivity : AppCompatActivity() {
                     NetworkAds.ADMOB,
                     "ca-app-pub-3940256099942544/3419835294XX",
                     NetworkAds.ADMOB,
-                    "ca-app-pub-3940256099942544/3419835294",
+                    "ca-app-pub-3940256099942544/3419835294XX",
                     NetworkAds.APPLOVIN_MAX,
-                    "",
+                    "fcd4981c18e62771",
                     NetworkAds.ADMOB,
                     "ca-app-pub-3940256099942544/3419835294XX",
                     object : CallbackOpenAd() {

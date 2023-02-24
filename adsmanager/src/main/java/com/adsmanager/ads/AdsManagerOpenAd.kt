@@ -2,12 +2,14 @@ package com.adsmanager.ads
 
 import android.app.Activity
 import com.adsmanager.admob.AdmobOpenAd
+import com.adsmanager.applovin.ApplovinOpenAds
 import com.adsmanager.core.CallbackAds
 import com.adsmanager.core.CallbackOpenAd
 import com.adsmanager.core.NetworkAds
 
 class AdsManagerOpenAd(
-    private val admobOpenAd: AdmobOpenAd
+    private val admobOpenAd: AdmobOpenAd,
+    private val applovinOpenAd: ApplovinOpenAds
 ) {
 
     private var currentActivity: Activity? = null
@@ -105,7 +107,7 @@ class AdsManagerOpenAd(
             }
 
             override fun onAdFailedToLoad(error: String?) {
-                callbackOpenAd?.onAdFailedToLoad(error)
+                if (secondaryNetwork == null)  callbackOpenAd?.onAdFailedToLoad(error)
                 secondaryNetwork?.let {
                     handleShow(
                         activity,
@@ -117,7 +119,7 @@ class AdsManagerOpenAd(
                             }
 
                             override fun onAdFailedToLoad(error: String?) {
-                                callbackOpenAd?.onAdFailedToLoad(error)
+                                if (tertiaryNetwork == null)  callbackOpenAd?.onAdFailedToLoad(error)
                                 tertiaryNetwork?.let {
                                     handleShow(
                                         activity,
@@ -127,9 +129,8 @@ class AdsManagerOpenAd(
                                             override fun onShowAdComplete() {
                                                 callbackOpenAd?.onShowAdComplete()
                                             }
-
                                             override fun onAdFailedToLoad(error: String?) {
-                                                callbackOpenAd?.onAdFailedToLoad(error)
+                                                if (quaternaryNetwork == null)  callbackOpenAd?.onAdFailedToLoad(error)
                                                 quaternaryNetwork?.let {
                                                     handleShow(
                                                         activity,
@@ -158,6 +159,7 @@ class AdsManagerOpenAd(
     ) {
         when (networkAds) {
             NetworkAds.ADMOB -> admobOpenAd.loadAd(activity, adUnitId, callbackAds)
+            NetworkAds.APPLOVIN_MAX -> applovinOpenAd.loadAd(activity, adUnitId, callbackAds)
             else -> {
                 callbackAds?.onAdFailedToLoad("Open Ad ${networkAds.name} not available")
             }
@@ -174,6 +176,9 @@ class AdsManagerOpenAd(
             NetworkAds.ADMOB -> {
                 currentNetworkAds = networkAds
                 admobOpenAd.showAdIfAvailable(activity, adUnitId, callbackOpenAd)
+            }
+            NetworkAds.APPLOVIN_MAX -> {
+                applovinOpenAd.showAdIfAvailable(adUnitId, callbackOpenAd)
             }
             else -> {
                 callbackOpenAd?.onAdFailedToLoad("Open Ad ${networkAds.name} not available")

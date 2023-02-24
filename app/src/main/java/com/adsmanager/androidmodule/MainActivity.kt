@@ -9,8 +9,8 @@ import com.adsmanager.ads.AdsManager
 import com.adsmanager.ads.AdsManagerOpenAd
 import com.adsmanager.core.*
 import com.adsmanager.core.iadsmanager.IInitialize
-import com.adsmanager.core.iadsmanager.SizeBanner
-import com.adsmanager.core.iadsmanager.SizeNative
+import com.adsmanager.core.rewards.IRewards
+import com.adsmanager.core.rewards.RewardsItem
 import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
@@ -21,33 +21,33 @@ class MainActivity : AppCompatActivity() {
     private val primaryNetworkOpenAd = NetworkAds.ADMOB
 
     private val primaryAds = NetworkAds.ADMOB
-    private val secondaryAds = NetworkAds.ADMOB
-    private val tertiaryAds = NetworkAds.APPLOVIN_MAX
-    private val quaternaryAds = NetworkAds.START_IO
+    private val secondaryAds = NetworkAds.FAN
+    private val tertiaryAds = NetworkAds.APPLOVIN_DISCOVERY
+    private val quaternaryAds = NetworkAds.APPLOVIN_MAX
 
     private val adUnitOpenAdId = "208690301"
 
     private val primaryAppId = ""
-    private val secondaryAppId = ""
+    private val secondaryAppId = "208690301"
     private val tertiaryAppId = "208690301"
     private val quaternaryAppId = "208690301"
 
     private val primaryBannerId = "ca-app-pub-3940256099942544/6300978111XXX"
-    private val secondaryBannerId = "ca-app-pub-3940256099942544/6300978111"
+//    private val secondaryBannerId = "ca-app-pub-3940256099942544/6300978111"
 
-    //    private val secondaryBannerId = "1363711600744576_1363713000744436"
-    private val tertiaryBannerId = "XXX"
+        private val secondaryBannerId = "1363711600744576_1363713000744436XXX"
+    private val tertiaryBannerId = "62c9e910bbd85680XXX"
     private val quaternaryBannerId = "62c9e910bbd85680"
 
     private val primaryInterstitialId = "ca-app-pub-3940256099942544/1033173712"
-    private val secondaryInterstitialId = "ca-app-pub-3940256099942544/1033173712"
+//    private val secondaryInterstitialId = "ca-app-pub-3940256099942544/1033173712"
 
-    //    private val secondaryInterstitialId = "1363711600744576_1508878896227845"
+        private val secondaryInterstitialId = "1363711600744576_1508878896227845"
     private val tertiaryInterstitialId = "7263a762d1a5366b"
-    private val quaternaryInterstitialId = "7263a762d1a5366b"
+    private val quaternaryInterstitialId = "1363711600744576_1363713000744436"
 
     private val primaryNativeId = "ca-app-pub-4764558539538067/9810032480XXX"
-    private val secondaryNativeId = "1363711600744576_1508905202891881"
+    private val secondaryNativeId = "1363711600744576_1508905202891881XXX"
     private val tertiaryNativeId = "91294e31700550f5"
     private val quaternaryNativeId = "91294e31700550f5"
 
@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
 
         adsManager.loadGdpr(
             this@MainActivity,
-            true,
+            false,
             primaryAds,
             secondaryAds,
             tertiaryAds,
@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity() {
 
         adsManager.setTestDevices(
             this,
-            listOf("ff85a790-04c7-4fbe-9ad5-e2a040685b69"),
+            listOf("f2d1eec9-4c09-42ec-a2e4-a65f33435822"),
             primaryAds,
             secondaryAds,
             tertiaryAds,
@@ -124,8 +124,8 @@ class MainActivity : AppCompatActivity() {
                 ConfigAds.primaryOpenAdId,
                 ConfigAds.secondaryAds,
                 ConfigAds.secondaryOpenAdId,
-                null,
-                "",
+                ConfigAds.tertiaryAds,
+                ConfigAds.tertiaryOpenAdId,
                 null,
                 "",
                 object : CallbackOpenAd() {
@@ -160,7 +160,13 @@ class MainActivity : AppCompatActivity() {
                 quaternaryBannerId,
                 object : CallbackAds() {
                     override fun onAdFailedToLoad(error: String?) {
+                        super.onAdFailedToLoad(error)
                         Log.e("HALLO", "banner error: $error")
+                    }
+
+                    override fun onAdLoaded() {
+                        super.onAdLoaded()
+                        Log.e("HALLO", "banner onAdLoaded")
                     }
                 })
         }
@@ -213,6 +219,48 @@ class MainActivity : AppCompatActivity() {
                 this,
                 nativeView,
                 SizeNative.SMALL,
+                primaryAds,
+                primaryNativeId,
+                secondaryAds,
+                secondaryNativeId,
+                tertiaryAds,
+                tertiaryNativeId,
+                quaternaryAds,
+                quaternaryNativeId,
+                object : CallbackAds() {
+                    override fun onAdFailedToLoad(error: String?) {
+                        Log.e("HALLO", "Native error: $error")
+                    }
+                })
+        }
+
+        findViewById<Button>(R.id.btnSmallNativeRectangle).setOnClickListener {
+            val nativeView = findViewById<RelativeLayout>(R.id.nativeView)
+            adsManager.showNativeAds(
+                this,
+                nativeView,
+                SizeNative.SMALL_RECTANGLE,
+                primaryAds,
+                primaryNativeId,
+                secondaryAds,
+                secondaryNativeId,
+                tertiaryAds,
+                tertiaryNativeId,
+                quaternaryAds,
+                quaternaryNativeId,
+                object : CallbackAds() {
+                    override fun onAdFailedToLoad(error: String?) {
+                        Log.e("HALLO", "Native error: $error")
+                    }
+                })
+        }
+
+        findViewById<Button>(R.id.btnMediumNative).setOnClickListener {
+            val nativeView = findViewById<RelativeLayout>(R.id.nativeView)
+            adsManager.showNativeAds(
+                this,
+                nativeView,
+                SizeNative.MEDIUM,
                 primaryAds,
                 primaryNativeId,
                 secondaryAds,

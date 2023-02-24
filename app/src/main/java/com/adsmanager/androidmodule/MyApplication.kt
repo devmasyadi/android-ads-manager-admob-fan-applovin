@@ -49,8 +49,8 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
                 ConfigAds.primaryOpenAdId,
                 ConfigAds.secondaryAds,
                 ConfigAds.secondaryOpenAdId,
-                null,
-                "",
+                ConfigAds.tertiaryAds,
+                ConfigAds.tertiaryOpenAdId,
                 null,
                 "",
                 null

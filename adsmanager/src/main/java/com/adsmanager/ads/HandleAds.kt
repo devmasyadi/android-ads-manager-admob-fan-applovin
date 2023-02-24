@@ -7,11 +7,11 @@ import com.adsmanager.admob.AdmobAds
 import com.adsmanager.applovin.ApplovinDiscoveryAds
 import com.adsmanager.applovin.ApplovinMaxAds
 import com.adsmanager.core.CallbackAds
-import com.adsmanager.core.IRewards
 import com.adsmanager.core.NetworkAds
+import com.adsmanager.core.SizeBanner
+import com.adsmanager.core.SizeNative
 import com.adsmanager.core.iadsmanager.IInitialize
-import com.adsmanager.core.iadsmanager.SizeBanner
-import com.adsmanager.core.iadsmanager.SizeNative
+import com.adsmanager.core.rewards.IRewards
 import com.adsmanager.fan.FanAds
 
 class HandleAds(
@@ -28,7 +28,7 @@ class HandleAds(
     ) {
         when (networkAds) {
             NetworkAds.ADMOB -> admobAds.initialize(context, appId, iInitialize)
-            NetworkAds.FAN -> fanAds.initialize(context, iInitialize)
+            NetworkAds.FAN -> fanAds.initialize(context, appId, iInitialize)
             NetworkAds.APPLOVIN_MAX -> applovinMaxAds.initialize(context, appId, iInitialize)
             NetworkAds.APPLOVIN_DISCOVERY -> applovinDiscoveryAds.initialize(
                 context,

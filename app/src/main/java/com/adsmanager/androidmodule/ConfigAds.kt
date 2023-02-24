@@ -7,11 +7,11 @@ object ConfigAds {
 
     var primaryAds: NetworkAds = NetworkAds.ADMOB
     var secondaryAds: NetworkAds? = NetworkAds.ADMOB
-    var tertiaryAds: NetworkAds? = null
+    var tertiaryAds: NetworkAds? = NetworkAds.APPLOVIN_MAX
 
     var primaryOpenAdId = "123"
-    var secondaryOpenAdId = "ca-app-pub-3940256099942544/3419835294"
-    var tertiaryOpenAdId = "123"
+    var secondaryOpenAdId = "ca-app-pub-3940256099942544/3419835294XX"
+    var tertiaryOpenAdId = "fcd4981c18e62771"
     var quaternaryOpenAdId = "123"
 
     var primaryBannerId: String = "12323"
