@@ -70,6 +70,10 @@ class HandleAds(
         adUnitId: String,
         callbackAds: CallbackAds?
     ) {
+        if (adUnitId.isEmpty()) {
+            callbackAds?.onAdFailedToLoad("AdUnit Empty")
+            return
+        }
         when (networkAds) {
             NetworkAds.ADMOB -> admobAds.showBanner(
                 activity,
@@ -99,7 +103,9 @@ class HandleAds(
                 adUnitId,
                 callbackAds
             )
-            else -> {}
+            else -> {
+                callbackAds?.onAdFailedToLoad("Ads None")
+            }
         }
     }
 
@@ -108,6 +114,9 @@ class HandleAds(
         networkAds: NetworkAds,
         adUnitId: String,
     ) {
+        if (adUnitId.isEmpty()) {
+            return
+        }
         when (networkAds) {
             NetworkAds.ADMOB -> admobAds.loadInterstitial(activity, adUnitId)
             NetworkAds.FAN -> fanAds.loadInterstitial(activity, adUnitId)
@@ -126,6 +135,10 @@ class HandleAds(
         adUnitId: String,
         callbackAds: CallbackAds?
     ) {
+        if (adUnitId.isEmpty()) {
+            callbackAds?.onAdFailedToLoad("AdUnit Empty")
+            return
+        }
         when (networkAds) {
             NetworkAds.ADMOB -> admobAds.showInterstitial(activity, adUnitId, callbackAds)
             NetworkAds.FAN -> fanAds.showInterstitial(activity, adUnitId, callbackAds)
@@ -139,7 +152,9 @@ class HandleAds(
                 adUnitId,
                 callbackAds
             )
-            else -> {}
+            else -> {
+                callbackAds?.onAdFailedToLoad("Ads None")
+            }
         }
     }
 
@@ -151,6 +166,10 @@ class HandleAds(
         adUnitId: String,
         callbackAds: CallbackAds?
     ) {
+        if (adUnitId.isEmpty()) {
+            callbackAds?.onAdFailedToLoad("AdUnit Empty")
+            return
+        }
         when (networkAds) {
             NetworkAds.ADMOB -> admobAds.showNativeAds(
                 activity,
@@ -180,7 +199,9 @@ class HandleAds(
                 adUnitId,
                 callbackAds
             )
-            else -> {}
+            else -> {
+                callbackAds?.onAdFailedToLoad("Ads None")
+            }
         }
     }
 
@@ -189,6 +210,9 @@ class HandleAds(
         networkAds: NetworkAds,
         adUnitId: String,
     ) {
+        if (adUnitId.isEmpty()) {
+            return
+        }
         when (networkAds) {
             NetworkAds.ADMOB -> admobAds.loadRewards(activity, adUnitId)
             NetworkAds.FAN -> fanAds.loadRewards(activity, adUnitId)
@@ -205,6 +229,10 @@ class HandleAds(
         callbackAds: CallbackAds?,
         iRewards: IRewards?
     ) {
+        if (adUnitId.isEmpty()) {
+            callbackAds?.onAdFailedToLoad("AdUnit Empty")
+            return
+        }
         when (networkAds) {
             NetworkAds.ADMOB -> admobAds.showRewards(activity, adUnitId, callbackAds, iRewards)
             NetworkAds.FAN -> fanAds.showRewards(activity, adUnitId, callbackAds, iRewards)
@@ -220,7 +248,9 @@ class HandleAds(
                 callbackAds,
                 iRewards
             )
-            else -> {}
+            else -> {
+                callbackAds?.onAdFailedToLoad("Ads None")
+            }
         }
     }
 }

@@ -107,7 +107,7 @@ class AdsManagerOpenAd(
             }
 
             override fun onAdFailedToLoad(error: String?) {
-                if (secondaryNetwork == null)  callbackOpenAd?.onAdFailedToLoad(error)
+                if (secondaryNetwork == null) callbackOpenAd?.onAdFailedToLoad(error)
                 secondaryNetwork?.let {
                     handleShow(
                         activity,
@@ -119,7 +119,7 @@ class AdsManagerOpenAd(
                             }
 
                             override fun onAdFailedToLoad(error: String?) {
-                                if (tertiaryNetwork == null)  callbackOpenAd?.onAdFailedToLoad(error)
+                                if (tertiaryNetwork == null) callbackOpenAd?.onAdFailedToLoad(error)
                                 tertiaryNetwork?.let {
                                     handleShow(
                                         activity,
@@ -129,8 +129,11 @@ class AdsManagerOpenAd(
                                             override fun onShowAdComplete() {
                                                 callbackOpenAd?.onShowAdComplete()
                                             }
+
                                             override fun onAdFailedToLoad(error: String?) {
-                                                if (quaternaryNetwork == null)  callbackOpenAd?.onAdFailedToLoad(error)
+                                                if (quaternaryNetwork == null) callbackOpenAd?.onAdFailedToLoad(
+                                                    error
+                                                )
                                                 quaternaryNetwork?.let {
                                                     handleShow(
                                                         activity,
@@ -157,6 +160,10 @@ class AdsManagerOpenAd(
         networkAds: NetworkAds,
         callbackAds: CallbackAds?
     ) {
+        if (adUnitId.isEmpty()) {
+            callbackAds?.onAdFailedToLoad("adUnit empty")
+            return
+        }
         when (networkAds) {
             NetworkAds.ADMOB -> admobOpenAd.loadAd(activity, adUnitId, callbackAds)
             NetworkAds.APPLOVIN_MAX -> applovinOpenAd.loadAd(activity, adUnitId, callbackAds)
@@ -172,6 +179,10 @@ class AdsManagerOpenAd(
         networkAds: NetworkAds,
         callbackOpenAd: CallbackOpenAd?
     ) {
+        if (adUnitId.isEmpty()) {
+            callbackOpenAd?.onAdFailedToLoad("adUnit empty")
+            return
+        }
         when (networkAds) {
             NetworkAds.ADMOB -> {
                 currentNetworkAds = networkAds

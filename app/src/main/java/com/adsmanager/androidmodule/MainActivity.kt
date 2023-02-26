@@ -22,7 +22,10 @@ class MainActivity : AppCompatActivity() {
 
     private val primaryAds = NetworkAds.ADMOB
     private val secondaryAds = NetworkAds.FAN
-    private val tertiaryAds = NetworkAds.APPLOVIN_DISCOVERY
+
+    //    private val secondaryAds = NetworkAds.NONE
+//    private val tertiaryAds = NetworkAds.APPLOVIN_DISCOVERY
+    private val tertiaryAds = NetworkAds.NONE
     private val quaternaryAds = NetworkAds.APPLOVIN_MAX
 
     private val adUnitOpenAdId = "208690301"
@@ -35,14 +38,15 @@ class MainActivity : AppCompatActivity() {
     private val primaryBannerId = "ca-app-pub-3940256099942544/6300978111XXX"
 //    private val secondaryBannerId = "ca-app-pub-3940256099942544/6300978111"
 
-        private val secondaryBannerId = "1363711600744576_1363713000744436XXX"
-    private val tertiaryBannerId = "62c9e910bbd85680XXX"
+    //        private val secondaryBannerId = "1363711600744576_1363713000744436XXX"
+    private val secondaryBannerId = "1363711600744576_1363713000744436"
+    private val tertiaryBannerId = "ca-app-pub-3940256099942544/6300978111"
     private val quaternaryBannerId = "62c9e910bbd85680"
 
     private val primaryInterstitialId = "ca-app-pub-3940256099942544/1033173712"
 //    private val secondaryInterstitialId = "ca-app-pub-3940256099942544/1033173712"
 
-        private val secondaryInterstitialId = "1363711600744576_1508878896227845"
+    private val secondaryInterstitialId = "1363711600744576_1508878896227845"
     private val tertiaryInterstitialId = "7263a762d1a5366b"
     private val quaternaryInterstitialId = "1363711600744576_1363713000744436"
 
@@ -77,6 +81,15 @@ class MainActivity : AppCompatActivity() {
             quaternaryAppId = quaternaryAppId,
         )
 
+        adsManager.setTestDevices(
+            this,
+            listOf("4362f959-044b-44ed-a177-f671fbaf73c0"),
+            primaryAds,
+            secondaryAds,
+            tertiaryAds,
+            quaternaryAds
+        )
+
         adsManager.loadGdpr(
             this@MainActivity,
             false,
@@ -106,15 +119,6 @@ class MainActivity : AppCompatActivity() {
             tertiaryBannerId,
             quaternaryAds,
             quaternaryRewardsId
-        )
-
-        adsManager.setTestDevices(
-            this,
-            listOf("f2d1eec9-4c09-42ec-a2e4-a65f33435822"),
-            primaryAds,
-            secondaryAds,
-            tertiaryAds,
-            quaternaryAds
         )
 
         findViewById<Button>(R.id.btnShowOpenApp).setOnClickListener {

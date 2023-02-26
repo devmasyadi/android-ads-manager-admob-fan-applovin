@@ -43,16 +43,17 @@ class SplashActivity : AppCompatActivity() {
             NetworkAds.APPLOVIN_MAX,
             "fcd4981c18e62771",
             NetworkAds.ADMOB,
-            "ca-app-pub-3940256099942544/3419835294XX",
+            "ca-app-pub-3940256099942544/3419835294",
             object :
                 CallbackAds() {
                 override fun onAdFailedToLoad(error: String?) {
                     startMainActivity()
+                    Log.e("HALLO", "error openAd Splash: $error")
                 }
 
                 override fun onAdLoaded() {
                     super.onAdLoaded()
-                    if(!isShowingAd) {
+                    if (!isShowingAd) {
                         isShowingAd = true
                         createTimer(COUNTER_TIME)
                     }
