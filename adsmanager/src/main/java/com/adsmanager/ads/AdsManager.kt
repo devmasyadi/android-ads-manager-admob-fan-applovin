@@ -116,12 +116,25 @@ class AdsManager(
                                                         )
                                                     }
                                                 }
+                                                override fun onAdLoaded() {
+                                                    super.onAdLoaded()
+                                                    callbackAds?.onAdLoaded()
+                                                }
                                             }
                                         )
                                     }
                                 }
+                                override fun onAdLoaded() {
+                                    super.onAdLoaded()
+                                    callbackAds?.onAdLoaded()
+                                }
                             })
                     }
+                }
+
+                override fun onAdLoaded() {
+                    super.onAdLoaded()
+                    callbackAds?.onAdLoaded()
                 }
             })
     }
@@ -245,6 +258,7 @@ class AdsManager(
             adUnitPrimaryId,
             object : CallbackAds() {
                 override fun onAdLoaded() {
+                    super.onAdLoaded()
                     callbackAds?.onAdLoaded()
                 }
 
@@ -259,6 +273,7 @@ class AdsManager(
                             adUnitSecondaryId,
                             object : CallbackAds() {
                                 override fun onAdLoaded() {
+                                    super.onAdLoaded()
                                     callbackAds?.onAdLoaded()
                                 }
 
@@ -273,6 +288,7 @@ class AdsManager(
                                             adUnitTertiaryAdsId,
                                             object : CallbackAds() {
                                                 override fun onAdLoaded() {
+                                                    super.onAdLoaded()
                                                     callbackAds?.onAdLoaded()
                                                 }
 
